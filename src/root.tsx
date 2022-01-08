@@ -12,12 +12,10 @@ import {
 import type { LoaderFunction, MetaFunction, LinksFunction } from "remix";
 
 import SupabaseProvider from "~/context/supabase";
-import AuthProvider from "~/context/auth";
 
 import create from "~/util/session.server";
 
 import libStyles from "~/styles/lib.css";
-import mainStyles from "~/styles/main.css";
 
 export let meta: MetaFunction = () => {
   return {
@@ -27,10 +25,7 @@ export let meta: MetaFunction = () => {
 };
 
 export let links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: libStyles },
-    { rel: "stylesheet", href: mainStyles },
-  ];
+  return [{ rel: "stylesheet", href: libStyles }];
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -56,11 +51,9 @@ export default function App() {
     <Document>
       <Environment env={env} />
       <SupabaseProvider token={token}>
-        <AuthProvider>
-          <Layout>
-            <Outlet />
-          </Layout>
-        </AuthProvider>
+        <Layout>
+          <Outlet />
+        </Layout>
       </SupabaseProvider>
     </Document>
   );

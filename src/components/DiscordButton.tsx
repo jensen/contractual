@@ -1,4 +1,12 @@
+import { useSupabaseUser } from "~/context/supabase";
+
 export default function DiscordButton() {
+  const user = useSupabaseUser();
+
+  if (user !== null) {
+    return null;
+  }
+
   return (
     <form method="post" action="/auth/discord">
       <button
