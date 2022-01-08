@@ -21,7 +21,7 @@ export default function SupabaseProvider(props: ISupabaseProviderProps) {
   const [supabase, setSupabase] = useState<SupabaseClient | null>(() =>
     create(props.token)
   );
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
 
   useEffect(() => {
     const supabase = create(props.token);
