@@ -8,6 +8,7 @@ import {
   useCatch,
   json,
   useLoaderData,
+  Link,
 } from "remix";
 import type { LoaderFunction, MetaFunction, LinksFunction } from "remix";
 
@@ -19,8 +20,8 @@ import libStyles from "~/styles/lib.css";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "",
-    description: "",
+    title: "Contractual",
+    description: "A contract based contract verification.",
   };
 };
 
@@ -154,13 +155,17 @@ function Layout({ children }: { children: React.ReactNode }) {
     <main className="h-full flex flex-col">
       <header className="px-4 py-2 text-discord flex justify-between items-center border-b-4 border-discord">
         <h2 className="text-xl">
-          <span className="font-bold">App</span>
-          <span className="font-light">lication</span>
+          <Link to="/">
+            <span className="font-bold">contract</span>
+            <span className="font-light">ual</span>
+          </Link>
         </h2>
         <DiscordButton />
       </header>
       <div className="p-4 flex-1">{children}</div>
-      <footer className="h-8 bg-discord text-white"></footer>
+      <footer className="px-4 py-2 bg-discord text-white">
+        made by <a href="https://github.com/jensen">@jensen</a>
+      </footer>
     </main>
   );
 }

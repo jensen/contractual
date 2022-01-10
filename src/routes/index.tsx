@@ -1,34 +1,40 @@
-import { useEffect } from "react";
 import type { LoaderFunction } from "remix";
-import { useLoaderData, json, useNavigate, useLocation } from "remix";
+import { useLoaderData, json, Link } from "remix";
 import { supabase } from "~/util/auth";
-import { useSupabaseUser } from "~/context/supabase";
+import useRedirectOnLogin from "~/hooks/useRedirectOnLogin";
 
 type IndexData = {};
 
-export let loader: LoaderFunction = () => {
-  return json({});
+export let loader: LoaderFunction = async ({ request }) => {
+  const db = await supabase(request);
+
+  const { data, error } = await db.from("contracts").select();
+
+  return json({ contracts: data });
 };
 
-interface IIndexViewProps {}
+interface IIndexViewProps {
+  contracts: any[];
+}
 
 const View = (props: IIndexViewProps) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const redirect = query.get("redirect_to");
+  useRedirectOnLogin();
 
-  useEffect(() => {
-    if (redirect) {
-      navigate(redirect);
-    }
-  }, [redirect]);
-
-  return <div>View</div>;
+  return (
+    <ul>
+      {props.contracts.map((contract) => (
+        <Link to={`/contracts/${contract.id}`}>
+          <li className="font-light text-2xl pb-1 border-b">
+            {contract.name}{" "}
+          </li>
+        </Link>
+      ))}
+    </ul>
+  );
 };
 
 export default function Index() {
   let data = useLoaderData<IndexData>();
 
-  return <View />;
+  return <View contracts={data.contracts} />;
 }
