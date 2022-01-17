@@ -56,15 +56,10 @@ export default function WalletProvider(props) {
       ethereum.on("chainChanged", handleChange);
 
       ethereum.request({ method: "eth_chainId" }).then((chainId: string) => {
-        console.log(chainId);
-        if (
-          chainId === "0x4" ||
-          chainId === "0x13881" ||
-          chainId === "0x7a69"
-        ) {
+        if (chainId === "0x13881") {
           dispatch({ type: SET_WALLET, wallet: ethereum });
         } else {
-          alert("Please use Mumbai network");
+          alert("Please use Polygon Mumbai network");
         }
       });
 
