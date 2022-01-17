@@ -1,5 +1,5 @@
 import { ActionFunction, LoaderFunction, redirect } from "remix";
-import { useLoaderData, json, Link, useParams } from "remix";
+import { useLoaderData, json, Link, Form, useParams } from "remix";
 import { supabase } from "~/util/auth";
 import ContractInput from "~/components/ContractInput";
 
@@ -11,7 +11,6 @@ export let action: ActionFunction = async ({ request, params }) => {
     .from("revisions")
     .insert({
       content: body.get("content") as string,
-      hash: "abc123",
       contract_id: params.id,
     })
     .single();
@@ -24,21 +23,28 @@ type IndexData = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
   const db = await supabase(request);
 
-  const { data, error } = await db
-    .from("contracts")
-    .select("*, revisions(*), creator:creator_id(*)")
-    .eq("id", params.id)
-    .single();
+  const [{ data: contract }, { data: revisions }] = await Promise.all([
+    db
+      .from("contracts")
+      .select("*, creator:creator_id(*)")
+      .eq("id", params.id)
+      .single(),
+    db
+      .from("revisions")
+      .select("*, editor:editor_id(*)")
+      .eq("contract_id", params.id)
+      .order("created_at", { ascending: false }),
+  ]);
 
-  const last = data.revisions.length - 1;
+  contract.revisions = revisions;
 
-  console.log(last);
+  const last = contract.revisions.length - 1;
 
   if (Number(params.revision) < last) {
-    return redirect(`/contracts/${params.id}/${last}/edit`);
+    return redirect(`/contracts/${params.id}/revisions/${last}/edit`);
   }
 
-  return json({ contract: data });
+  return json({ contract });
 };
 
 interface IIndexViewProps {
@@ -49,14 +55,18 @@ const View = (props: IIndexViewProps) => {
   const { revision } = useParams();
 
   return (
-    <form className="h-full flex flex-col" method="post">
+    <Form className="h-full flex flex-col" method="post">
       <header className="py-2">
         <div className="p-2 w-full text-2xl border-b border-gray-900/5">
           {props.contract.name}
         </div>
       </header>
       <ContractInput
-        content={props.contract.revisions[Number(revision)].content}
+        content={
+          props.contract.revisions[
+            props.contract.revisions.length - Number(revision) - 1
+          ].content
+        }
       />
       <footer className="py-4 flex justify-end space-x-4">
         <Link
@@ -65,11 +75,14 @@ const View = (props: IIndexViewProps) => {
         >
           Cancel
         </Link>
-        <button className="rounded-md px-4 p-2 bg-discord text-white">
+        <button
+          type="submit"
+          className="rounded-md px-4 p-2 bg-discord text-white"
+        >
           Save
         </button>
       </footer>
-    </form>
+    </Form>
   );
 };
 

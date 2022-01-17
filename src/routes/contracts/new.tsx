@@ -18,7 +18,6 @@ export let action: ActionFunction = async ({ request }) => {
     .from("revisions")
     .insert({
       content: body.get("content") as string,
-      hash: "abc123",
       contract_id: contract.id,
     })
     .single();

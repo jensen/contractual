@@ -12,7 +12,13 @@ import {
 } from "remix";
 import type { LoaderFunction, MetaFunction, LinksFunction } from "remix";
 
+import DiscordButton from "~/components/DiscordButton";
+
 import SupabaseProvider from "~/context/supabase";
+import WalletProvider from "~/context/wallet";
+import AgreementProvider from "./context/agreement";
+
+import { ethers } from "ethers";
 
 import create from "~/util/session.server";
 
@@ -52,9 +58,13 @@ export default function App() {
     <Document>
       <Environment env={env} />
       <SupabaseProvider token={token}>
-        <Layout>
-          <Outlet />
-        </Layout>
+        <WalletProvider>
+          <AgreementProvider>
+            <Layout>
+              <Outlet />
+            </Layout>
+          </AgreementProvider>
+        </WalletProvider>
       </SupabaseProvider>
     </Document>
   );
@@ -149,15 +159,15 @@ function Document({
     </html>
   );
 }
-import DiscordButton from "~/components/DiscordButton";
+
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <main className="h-full flex flex-col">
       <header className="px-4 py-2 text-discord flex justify-between items-center border-b-4 border-discord">
         <h2 className="text-xl">
           <Link to="/">
-            <span className="font-bold">contract</span>
-            <span className="font-light">ual</span>
+            <span className="font-bold">contr</span>
+            <span className="font-light">actual</span>
           </Link>
         </h2>
         <DiscordButton />

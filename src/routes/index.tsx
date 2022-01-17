@@ -2,6 +2,7 @@ import type { LoaderFunction } from "remix";
 import { useLoaderData, json, Link } from "remix";
 import { supabase } from "~/util/auth";
 import useRedirectOnLogin from "~/hooks/useRedirectOnLogin";
+import { useSupabaseUser } from "~/context/supabase";
 
 type IndexData = {};
 
@@ -18,18 +19,30 @@ interface IIndexViewProps {
 }
 
 const View = (props: IIndexViewProps) => {
+  const user = useSupabaseUser();
+
   useRedirectOnLogin();
 
   return (
-    <ul>
-      {props.contracts.map((contract) => (
-        <Link to={`/contracts/${contract.id}`}>
-          <li className="font-light text-2xl pb-1 border-b">
-            {contract.name}{" "}
-          </li>
+    <>
+      {user && (
+        <Link
+          to="/contracts/new"
+          className="block w-fit mb-2 px-4 py-2 bg-green-400 text-white rounded-md"
+        >
+          Create Contract
         </Link>
-      ))}
-    </ul>
+      )}
+      <ul>
+        {props.contracts.map((contract) => (
+          <Link key={contract.id} to={`/contracts/${contract.id}`}>
+            <li className="font-light text-2xl mb-2 pb-2 border-b">
+              {contract.name}{" "}
+            </li>
+          </Link>
+        ))}
+      </ul>
+    </>
   );
 };
 

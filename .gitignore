@@ -6,9 +6,12 @@ node_modules
 
 /src/styles/lib.css
 
+.DS_Store
+
 
 /.env
 /.env.*
+
 # Supabase
 **/supabase/.branches
 **/supabase/.temp

@@ -9,5 +9,5 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     .select("*")
     .eq("contract_id", params.id);
 
-  return redirect(`/contracts/${params.id}/${data.length - 1}`);
+  return redirect(`/contracts/${params.id}/revisions/${data.length - 1}`);
 };
