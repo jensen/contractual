@@ -6,6 +6,8 @@ This project was completed as part of a group learning exercise. This current it
 
 [https://contractual.netlify.app/](https://contractual.netlify.app/)
 
+* Unfortunately the Supabase backend is currently disabled for this site. The limit of 2 free projects forces me to rotate.
+
 ## Project Features
 
 ### User Stories
@@ -22,3 +24,4 @@ This project was completed as part of a group learning exercise. This current it
 - react
 - remix
 - tailwindcss
+- supabase
