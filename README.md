@@ -4,6 +4,8 @@ This project was completed as part of a group learning exercise. This current it
 
 ## Demo
 
+![image](https://user-images.githubusercontent.com/14803/198218765-90b9b8a0-f424-46ad-a1af-d7fcb34a6147.png)
+
 [https://contractual.netlify.app/](https://contractual.netlify.app/)
 
 * Unfortunately the Supabase backend is currently disabled for this site. The limit of 2 free projects forces me to rotate.
